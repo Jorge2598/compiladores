@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang = "en">
+ 
+<head>
+    <meta charset = "utf-8">
+    <meta name = "viewport" content="width=device-width, initial-scale=1.0">
+    <link href="estilos.css" rel="stylesheet"/>
+    <title>CARGA Y LECTURA DE UN ARCHIVO</title>
+</head>
+ 
+<body>
+    <h1>Compiladores</h1>
+    <input type="file" class = "file-select" id="archivotexto" accept=".cpp" onload= abrir(event)> 
+    <div id="Texto">TEXTO AQUI</div>   
+    <div id="contenido" cols="30" rows="10" ></div>
+    <div id="mensajes"></div>
+
+    <table id="TablaMain">
+        <thead>Especiales</thead>
+        <tbody id="tablaEspe">
+        <tr>
+        <td class="center" style="padding: 20px">&nbsp;</td>
+        </tr>
+        </tbody>
+    </table>
+ 
+    <script>
+        function abrir (event){
+            let archivo = event.target.files[0]; // SELECCIONA EL ARCHIVO Y LO ABRE  
+            if(archivo){
+                let reader = new FileReader();
+                reader.readAsText(archivo);
+                reader.onload = function(e){
+                    var contenido =e.target.result; // OBTENEMOS EL CONTENIDO.
+                    let numeros= obtenerNumero(contenido);
+                    let palabras = obtenerPalabra(contenido); 
+                    let especiales= obtenerEspeciales(contenido);
+                    let Caracteres = especiales.filter((item,index)=>{ return especiales.indexOf(item) === index; });
+                    console.log(Caracteres);
+                    var body = document.getElementById('tablaEspe');
+                    Caracteres.forEach(cac => {
+                       '<td>'+cac+'</td>';
+                        body.append(cac);
+                    })
+                    contenido.split(' ').forEach(element => {
+                        document.getElementById('contenido').innerHTML+= element+ "<br/>"; 
+                    });
+                }    
+            }else{
+                document.getElementById('mensajes').innerText = 'No se selecciono un archivo';
+            }
+        }
+    
+        window.addEventListener('load', () => { // DETECTA LA CARGA DEL DOCUMENTO
+            document.getElementById('archivotexto').addEventListener('change', abrir);  //DETECTA EL ELEMENTO DEL IMPUT   
+        });    
+        
+        function especiales(cadena){
+            console.log(especiales);
+            for(let especial of especiales){
+                console.log(especial);
+            }
+        }
+
+        function obtenerPalabra(cadena){
+
+            return cadena.match(/[aA-zZ]+\S/g);
+        }
+
+         function obtenerNumero(cadena){
+
+            return cadena.match(/[0-9]+\S/g);
+        }
+
+        function obtenerEspeciales(cadena){
+
+            return cadena.split(/\w/g );
+        }
+        
+    </script>
+</body>
